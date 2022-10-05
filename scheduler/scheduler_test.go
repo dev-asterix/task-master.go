@@ -1,7 +1,6 @@
 package scheduler
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -9,7 +8,7 @@ import (
 
 func TestNewIntervalBased(t *testing.T) {
 	type args struct {
-		freq     int64
+		freq     uint64
 		unit     Duration
 		timezone *time.Location
 	}
@@ -55,7 +54,7 @@ func TestNewIntervalBased(t *testing.T) {
 
 func TestInterval_Frequency(t *testing.T) {
 	type fields struct {
-		frequency int64
+		frequency uint64
 		unit      Duration
 		timezone  *time.Location
 	}
@@ -122,7 +121,7 @@ func TestInterval_Frequency(t *testing.T) {
 
 func TestInterval_Next(t *testing.T) {
 	type fields struct {
-		frequency int64
+		frequency uint64
 		unit      Duration
 		timezone  *time.Location
 	}
@@ -266,9 +265,8 @@ func TestInterval_Next(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			i := NewIntervalBased(tt.fields.frequency, tt.fields.unit)
-			if got := i.Next(); !reflect.DeepEqual(got, tt.want) {
-				fmt.Println(got.nextRun.String(), tt.want.nextRun.String())
-				t.Errorf("Interval.Next() = %+v, want %+v", got, tt.want)
+			if i.Next(); !reflect.DeepEqual(i, tt.want) {
+				t.Errorf("Interval.Next() = %+v, want %+v", i, tt.want)
 			}
 		})
 	}
